@@ -1,26 +1,33 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpRequest, HttpEventType, HttpResponse } from '@angular/common/http';
-import { Subject } from 'rxjs/Subject';
-import { Observable } from 'rxjs/Observable';
+import { Injectable } from "@angular/core";
+import {
+  HttpClient,
+  HttpRequest,
+  HttpEventType,
+  HttpResponse
+} from "@angular/common/http";
+import { Subject } from "rxjs/Subject";
+import { Observable } from "rxjs/Observable";
 
-const url = 'http://localhost:3000/upload';
+const url = "http://localhost:3000/upload";
 
 @Injectable()
 export class UploadService {
   constructor(private http: HttpClient) {}
 
-  public upload(files: Set<File>): { [key: string]: Observable<number> } {
+  public upload(
+    files: Set<File>
+  ): { [key: string]: { progress: Observable<number> } } {
     // this will be the our resulting map
-    const status = {};
+    const status: { [key: string]: { progress: Observable<number> } } = {};
 
     files.forEach(file => {
       // create a new multipart-form for every file
       const formData: FormData = new FormData();
-      formData.append('file', file, file.name);
+      formData.append("file", file, file.name);
 
       // create a http-post request and pass the form
       // tell it to report the upload progress
-      const req = new HttpRequest('POST', url, formData, {
+      const req = new HttpRequest("POST", url, formData, {
         reportProgress: true
       });
 
