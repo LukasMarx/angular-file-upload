@@ -1,6 +1,6 @@
 ![image](https://raw.githubusercontent.com/LukasMarx/angular-file-upload/master/angular-file-upload-component.png)
 # Creating a File Upload Component in Angular
-## Angular version: 5.2
+## Angular version: 7.2.13
 
 Creating file-upload components can be quite hard. 
 
