@@ -6,7 +6,7 @@ import { forkJoin } from 'rxjs';
 @Component({
   selector: 'app-dialog',
   templateUrl: './dialog.component.html',
-  styleUrls: ['./dialog.component.css']
+  styleUrls: ['./dialog.component.scss']
 })
 export class DialogComponent implements OnInit {
   @ViewChild('file', { static: false }) file;
