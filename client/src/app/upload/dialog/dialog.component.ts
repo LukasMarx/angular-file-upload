@@ -1,21 +1,21 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { UploadService } from '../upload.service';
-import { forkJoin } from 'rxjs/observable/forkJoin';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-dialog',
   templateUrl: './dialog.component.html',
-  styleUrls: ['./dialog.component.css']
+  styleUrls: ['./dialog.component.scss']
 })
 export class DialogComponent implements OnInit {
-  @ViewChild('file') file;
+  @ViewChild('file', { static: false }) file;
 
   public files: Set<File> = new Set();
 
-  constructor(public dialogRef: MatDialogRef<DialogComponent>, public uploadService: UploadService) {}
+  constructor(public dialogRef: MatDialogRef<DialogComponent>, public uploadService: UploadService) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   progress;
   canBeClosed = true;

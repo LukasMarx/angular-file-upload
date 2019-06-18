@@ -1,18 +1,17 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import {
   HttpClient,
   HttpRequest,
   HttpEventType,
   HttpResponse
-} from "@angular/common/http";
-import { Subject } from "rxjs/Subject";
-import { Observable } from "rxjs/Observable";
+} from '@angular/common/http';
+import { Subject, Observable } from 'rxjs';
 
-const url = "http://localhost:3000/upload";
+const url = 'http://localhost:3000/upload';
 
 @Injectable()
 export class UploadService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   public upload(
     files: Set<File>
@@ -23,11 +22,11 @@ export class UploadService {
     files.forEach(file => {
       // create a new multipart-form for every file
       const formData: FormData = new FormData();
-      formData.append("file", file, file.name);
+      formData.append('file', file, file.name);
 
       // create a http-post request and pass the form
       // tell it to report the upload progress
-      const req = new HttpRequest("POST", url, formData, {
+      const req = new HttpRequest('POST', url, formData, {
         reportProgress: true
       });
 
@@ -36,7 +35,7 @@ export class UploadService {
 
       // send the http-request and subscribe for progress-updates
 
-      let startTime = new Date().getTime();
+      const startTime = new Date().getTime();
       this.http.request(req).subscribe(event => {
         if (event.type === HttpEventType.UploadProgress) {
           // calculate the progress percentage
