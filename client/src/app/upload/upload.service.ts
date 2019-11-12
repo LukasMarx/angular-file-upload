@@ -36,19 +36,33 @@ export class UploadService {
       // send the http-request and subscribe for progress-updates
 
       const startTime = new Date().getTime();
-      this.http.request(req).subscribe(event => {
-        if (event.type === HttpEventType.UploadProgress) {
-          // calculate the progress percentage
+      this.http.request(req).subscribe(
+        event => {
+          if (event.type === HttpEventType.UploadProgress) {
+            // calculate the progress percentage
 
-          const percentDone = Math.round((100 * event.loaded) / event.total);
-          // pass the percentage into the progress-stream
-          progress.next(percentDone);
-        } else if (event instanceof HttpResponse) {
-          // Close the progress-stream if we get an answer form the API
-          // The upload is complete
+            const percentDone = Math.round((100 * event.loaded) / event.total);
+            // pass the percentage into the progress-stream
+            progress.next(percentDone);
+          } else if (event instanceof HttpResponse) {
+            // Close the progress-stream if we get an answer form the API
+            // The upload is complete
+            progress.complete();
+          }
+        },
+        err => {
+          console.log(`Upload failed ! ${err.statusText} at ${startTime}`);
+          // if download fails set -1 to progress
+          progress.next(-1);
           progress.complete();
+
+          status[file.name] = {
+            progress: progress.asObservable()
+          };
+
+          return status;
         }
-      });
+      );
 
       // Save every progress-observable in a map of all observables
       status[file.name] = {

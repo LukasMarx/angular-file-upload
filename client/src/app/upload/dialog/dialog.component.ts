@@ -9,13 +9,11 @@ import { forkJoin } from 'rxjs';
   styleUrls: ['./dialog.component.scss']
 })
 export class DialogComponent implements OnInit {
-  @ViewChild('file', { static: false }) file;
-
-  public files: Set<File> = new Set();
 
   constructor(public dialogRef: MatDialogRef<DialogComponent>, public uploadService: UploadService) { }
+  @ViewChild('file', { static: false }) file: { nativeElement: { files: { [key: string]: File; }; click: () => void; }; };
 
-  ngOnInit() { }
+  public files: Set<File> = new Set();
 
   progress;
   canBeClosed = true;
@@ -24,10 +22,12 @@ export class DialogComponent implements OnInit {
   uploading = false;
   uploadSuccessful = false;
 
+  ngOnInit() { }
+
   onFilesAdded() {
     const files: { [key: string]: File } = this.file.nativeElement.files;
-    for (let key in files) {
-      if (!isNaN(parseInt(key))) {
+    for (const key in files) {
+      if (!isNaN(parseInt(key, 10))) {
         this.files.add(files[key]);
       }
     }
@@ -50,13 +50,20 @@ export class DialogComponent implements OnInit {
     this.progress = this.uploadService.upload(this.files);
     console.log(this.progress);
     for (const key in this.progress) {
-      this.progress[key].progress.subscribe(val => console.log(val));
+      if (key) {
+        this.progress[key].progress.subscribe((val: any) => {
+          console.log(this.progress);
+          console.log(val);
+        });
+      }
     }
 
     // convert the progress map into an array
-    let allProgressObservables = [];
-    for (let key in this.progress) {
-      allProgressObservables.push(this.progress[key].progress);
+    const allProgressObservables = [];
+    for (const key in this.progress) {
+      if (key) {
+        allProgressObservables.push(this.progress[key].progress);
+      }
     }
 
     // Adjust the state variables
